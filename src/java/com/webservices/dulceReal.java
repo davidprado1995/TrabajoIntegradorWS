@@ -61,5 +61,34 @@ public class dulceReal {
         ds.agregarACola(pedido);
         return "Mensaje enviado a cola";
     }
+
+    /**
+     * Web service operation
+     */
+    @WebMethod(operationName = "loguearCliente")
+    public boolean loguearCliente(@WebParam(name = "usuario") String usuario, @WebParam(name = "clave") String clave) {
+        //TODO write your implementation code here:
+        Connection con=DBConexion.getConnection();
+        PreparedStatement ps;
+        ResultSet rs;
+        boolean encontrado = false;
+        String sql="SELECT idusuariosclientes, contrasena FROM usuariosclientes";
+         try {
+            ps=con.prepareStatement(sql);
+            rs = ps.executeQuery();
+            while(rs.next() && encontrado==false){
+                if(usuario.equalsIgnoreCase(rs.getString(1)) /*&& clave.equalsIgnoreCase(rs.getString(2))*/){
+                 encontrado=true;   
+                }
+            }
+            rs.close();
+        } catch (SQLException ex) {                        
+        }if(encontrado==false){
+                return false;
+            }else{
+                return true;
+            }
+        
+    }
     
 }
