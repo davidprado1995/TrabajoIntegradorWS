@@ -72,14 +72,15 @@ public class dulceReal {
         PreparedStatement ps;
         ResultSet rs;
         boolean encontrado = false;
-        String sql="SELECT idusuariosclientes, contrasena FROM usuariosclientes";
+        String sql="SELECT * FROM usuariosclientes WHERE idusuariosclientes = ? AND "
+                + "contrasena = ?";
          try {
             ps=con.prepareStatement(sql);
+            ps.setString(1, usuario);
+            ps.setString(2, clave);
             rs = ps.executeQuery();
-            while(rs.next() && encontrado==false){
-                if(usuario.equalsIgnoreCase(rs.getString(1)) /*&& clave.equalsIgnoreCase(rs.getString(2))*/){
-                 encontrado=true;   
-                }
+            if(rs.next()){  
+                 encontrado=true;  
             }
             rs.close();
         } catch (SQLException ex) {                        
