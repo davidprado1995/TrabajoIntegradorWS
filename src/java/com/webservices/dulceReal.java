@@ -8,6 +8,7 @@ package com.webservices;
 import com.clases.Producto;
 import com.google.gson.Gson;
 import com.utils.DBConexion;
+import com.utils.DemoCliente;
 import com.utils.DemoServer;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -90,6 +91,17 @@ public class dulceReal {
                 return true;
             }
         
+    }
+
+    /**
+     * Web service operation
+     */
+    @WebMethod(operationName = "cargarABaseDeDatos")
+    public String cargarABaseDeDatos() {
+        //TODO write your implementation code here:
+        DemoCliente dc = new DemoCliente();
+        dc.cargaraBaseDeDatos();
+        return "Pedido Cargado";
     }
     
 }
