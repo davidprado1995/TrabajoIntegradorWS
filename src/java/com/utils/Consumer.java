@@ -22,20 +22,27 @@ public class Consumer implements MessageListener {
 				//Codigo para jalar datos de la cola y grabarlo en bd
 				String pedidoJson= ((TextMessage)arg0).getText();
 				System.out.println("Mensaje Recibido = "+ pedidoJson);
+                                
+				System.out.println("Wiiii");
                                 Gson gson = new Gson();
 				Pedido pedidoHecho = gson.fromJson(pedidoJson, Pedido.class);
+                                System.out.println(pedidoHecho.costoTotal + "\n" + pedidoHecho.cliente);
 				Connection con=DBConexion.getConnection();
 
 				//modificar a tabla de pedido
 				String sql = "INSERT INTO pedido (costototal, cliente) values(?,?)";
+                                System.out.println("se creó la sentencia");
 				PreparedStatement stmt = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
 				stmt.setFloat(1,pedidoHecho.costoTotal);
 				stmt.setString(2,pedidoHecho.cliente);
+                                System.out.println("Se tiene el pedido listo para la base de datos");
 				stmt.executeUpdate();
+                                System.out.println("Listo!!! se agregó el pedido");
 				
 				
 				//Insertar ventas con valor de idpedido
 				ResultSet rs = stmt.getGeneratedKeys();
+                                System.out.println("Espero se agreguen las ventas");
 				rs.next();
 				int auto_id = rs.getInt(1);
 				for(int i=0;i<pedidoHecho.ventas.size();i++){
@@ -46,8 +53,7 @@ public class Consumer implements MessageListener {
                                     stmt2.setInt(4,pedidoHecho.ventas.get(i).prod.idProducto);
                                     stmt2.setInt(3,auto_id);
                                     stmt2.executeUpdate();
-				}
-					
+				}	
 				
 			} 
 			else if (arg0 instanceof ObjectMessage) {

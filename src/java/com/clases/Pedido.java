@@ -14,6 +14,7 @@ import java.util.List;
 
 //Esta clase no se usa en este webservice, Morzan usala para el web app del cliente.
 public class Pedido {
+    public int idpedido;
     public float costoTotal=0.0f;
     public String cliente;
     public List<Venta> ventas;
@@ -26,6 +27,12 @@ public class Pedido {
             costoTotal=costoTotal+ventas.get(i).costo;
         }
         
+    }
+    
+    public Pedido(int idpedido, float costototal, String cliente){
+        this.idpedido=idpedido;
+        this.costoTotal=costototal;
+        this.cliente=cliente;
     }
     
     public Pedido(){

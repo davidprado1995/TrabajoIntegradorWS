@@ -6,6 +6,8 @@
 package com.webservices;
 
 import com.clases.Producto;
+import com.clases.Pedido;
+import com.clases.Venta;
 import com.google.gson.Gson;
 import com.utils.DBConexion;
 import com.utils.DemoCliente;
@@ -102,6 +104,96 @@ public class dulceReal {
         DemoCliente dc = new DemoCliente();
         dc.cargaraBaseDeDatos();
         return "Pedido Cargado";
+    }
+
+    /**
+     * Web service operation
+     */
+    @WebMethod(operationName = "conseguirPedidos")
+    public String conseguirPedidos() {
+        //TODO write your implementation code here:
+        
+        List<Pedido> listaPedidos = new ArrayList<Pedido>();
+        Connection con=DBConexion.getConnection();
+        PreparedStatement ps;
+        ResultSet rs;
+        String sql="SELECT idpedido, costototal, cliente FROM pedido";
+        try {
+            ps=con.prepareStatement(sql);
+            rs = ps.executeQuery();
+            while(rs.next()){      
+                System.out.println("Existe algo");
+                Pedido p = new Pedido(rs.getInt(1), rs.getFloat(2), rs.getString(3));
+                listaPedidos.add(p);
+            }
+            rs.close();
+        } catch (SQLException ex) {                        
+        }
+        String pedidos=new Gson().toJson(listaPedidos);
+        //return pedidos;
+        
+        return pedidos;
+    }
+
+    /**
+     * Web service operation
+     */
+    @WebMethod(operationName = "loguearVendedor")
+    public boolean loguearVendedor(@WebParam(name = "usuarioAdm") String usuarioAdm, @WebParam(name = "clave") String clave) {
+        Connection con=DBConexion.getConnection();
+        PreparedStatement ps;
+        ResultSet rs;
+        boolean encontrado = false;
+        String sql="SELECT * FROM arqsw.usuariosvendedores WHERE idusuarios = ? AND "
+                + "contrasena = ?";
+         try {
+            ps=con.prepareStatement(sql);
+            ps.setString(1, usuarioAdm);
+            ps.setString(2, clave);
+            rs = ps.executeQuery();
+            if(rs.next()){  
+                 encontrado=true;  
+            }
+            rs.close();
+        } catch (SQLException ex) {                        
+        }if(encontrado==false){
+                return false;
+            }else{
+                return true;
+            }
+        
+    
+    }
+
+    /**
+     * Web service operation
+     */
+    @WebMethod(operationName = "conseguirVentar")
+    public String conseguirVentar(@WebParam(name = "idpedido") Integer idpedido) {
+        //TODO write your implementation code here:
+        List<Venta> listaVentas = new ArrayList<Venta>();
+        Connection con=DBConexion.getConnection();
+        PreparedStatement ps;
+        ResultSet rs;
+        String sql="SELECT idventa, cantidad, costo, idpedido, idproducto FROM venta WHERE idpedido = ?";
+        try {
+            ps=con.prepareStatement(sql);
+            ps.setInt(1, idpedido);
+            rs = ps.executeQuery();
+            while(rs.next()){
+                String  sql2="SELECT nombreProducto, precioProducto, idproducto FROM tablaproductos WHERE idproducto=?";
+                PreparedStatement ps2=con.prepareStatement(sql2);
+                ps2.setInt(1, rs.getInt(5));
+                ResultSet rs2= ps2.executeQuery();
+                Producto prod=new Producto(rs2.getString(1), rs2.getFloat(2), rs2.getInt(3));
+                Venta v = new Venta(rs.getInt(1), rs.getFloat(2), prod);
+                listaVentas.add(v);
+            }
+            rs.close();
+        } catch (SQLException ex) {                        
+        }
+        String ventas=new Gson().toJson(listaVentas);
+        return ventas;
     }
     
 }
