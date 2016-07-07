@@ -34,6 +34,47 @@ public class Venta {
         this.costo = costo;
         this.prod = prod;
     }
+
+    public Venta(int cantidad, float costo, Producto prod, int idventa) {
+        this.cantidad = cantidad;
+        this.costo = costo;
+        this.prod = prod;
+        this.idventa = idventa;
+    }
+    
+    
+
+    public int getCantidad() {
+        return cantidad;
+    }
+
+    public void setCantidad(int cantidad) {
+        this.cantidad = cantidad;
+    }
+
+    public float getCosto() {
+        return costo;
+    }
+
+    public void setCosto(float costo) {
+        this.costo = costo;
+    }
+
+    public Producto getProd() {
+        return prod;
+    }
+
+    public void setProd(Producto prod) {
+        this.prod = prod;
+    }
+
+    public int getIdventa() {
+        return idventa;
+    }
+
+    public void setIdventa(int idventa) {
+        this.idventa = idventa;
+    }
     
     
         

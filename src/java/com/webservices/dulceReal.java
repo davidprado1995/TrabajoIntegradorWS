@@ -177,23 +177,45 @@ public class dulceReal {
         ResultSet rs;
         String sql="SELECT idventa, cantidad, costo, idpedido, idproducto FROM venta WHERE idpedido = ?";
         try {
+            System.out.println("Se mandó la sentencia");
             ps=con.prepareStatement(sql);
             ps.setInt(1, idpedido);
             rs = ps.executeQuery();
+            Venta v = null;
             while(rs.next()){
+                System.out.println("Corrió la sentencia\n" + rs.getFloat(2) + "\n" + rs.getInt(5));
+                int idventa = rs.getInt(1);
                 String  sql2="SELECT nombreProducto, precioProducto, idproducto FROM tablaproductos WHERE idproducto=?";
                 PreparedStatement ps2=con.prepareStatement(sql2);
                 ps2.setInt(1, rs.getInt(5));
                 ResultSet rs2= ps2.executeQuery();
+                while(rs2.next()){
+                    System.out.println("Existe el prducto con id " + rs2.getInt(3));
                 Producto prod=new Producto(rs2.getString(1), rs2.getFloat(2), rs2.getInt(3));
-                Venta v = new Venta(rs.getInt(1), rs.getFloat(2), prod);
+                v = new Venta(rs.getInt(1), rs.getFloat(2), prod);
+                }
+                //se pierde el idventa en el bucle; esto es para que no se pierda
+                v.setIdventa(idventa);
                 listaVentas.add(v);
             }
             rs.close();
         } catch (SQLException ex) {                        
         }
         String ventas=new Gson().toJson(listaVentas);
+        System.out.println(ventas);
         return ventas;
     }
+    
+    /*public Producto gettearProducto(int idproducto){
+        Connection con=DBConexion.getConnection();
+        ResultSet rs;
+        String  sql2="SELECT nombreProducto, precioProducto, idproducto FROM tablaproductos WHERE idproducto=?";
+        PreparedStatement ps2=con.prepareStatement(sql2);
+        
+                ps2.setInt(1, rs.getInt(5));
+                ResultSet rs2= ps2.executeQuery();
+                System.out.println("Existe el prducto con id " + rs2.getInt(3));
+                Producto prod=new Producto(rs2.getString(1), rs2.getFloat(2), rs2.getInt(3));
+    }*/
     
 }

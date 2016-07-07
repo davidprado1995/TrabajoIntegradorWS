@@ -53,8 +53,10 @@ public class Consumer implements MessageListener {
                                     stmt2.setInt(4,pedidoHecho.ventas.get(i).prod.idProducto);
                                     stmt2.setInt(3,auto_id);
                                     stmt2.executeUpdate();
-				}	
-				
+				}
+                                con.commit();
+                                rs.close();
+				con.close();
 			} 
 			else if (arg0 instanceof ObjectMessage) {
 				System.out.println("Mensaje Recibido : " +((ObjectMessage)arg0).getObject());
