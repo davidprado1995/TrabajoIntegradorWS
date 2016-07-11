@@ -30,11 +30,12 @@ public class Consumer implements MessageListener {
 				Connection con=DBConexion.getConnection();
 
 				//modificar a tabla de pedido
-				String sql = "INSERT INTO pedido (costototal, cliente) values(?,?)";
+				String sql = "INSERT INTO pedido (costototal, cliente, fecha) values(?,?,?)";
                                 System.out.println("se creó la sentencia");
 				PreparedStatement stmt = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
 				stmt.setFloat(1,pedidoHecho.costoTotal);
 				stmt.setString(2,pedidoHecho.cliente);
+                                stmt.setString(3, pedidoHecho.fecha);
                                 System.out.println("Se tiene el pedido listo para la base de datos");
 				stmt.executeUpdate();
                                 System.out.println("Listo!!! se agregó el pedido");

@@ -117,20 +117,19 @@ public class dulceReal {
         Connection con=DBConexion.getConnection();
         PreparedStatement ps;
         ResultSet rs;
-        String sql="SELECT idpedido, costototal, cliente FROM pedido";
+        String sql="SELECT idpedido, costototal, cliente, fecha FROM pedido";
         try {
             ps=con.prepareStatement(sql);
             rs = ps.executeQuery();
             while(rs.next()){      
                 System.out.println("Existe algo");
-                Pedido p = new Pedido(rs.getInt(1), rs.getFloat(2), rs.getString(3));
+                Pedido p = new Pedido(rs.getInt(1), rs.getFloat(2), rs.getString(3), rs.getString(4));
                 listaPedidos.add(p);
             }
             rs.close();
         } catch (SQLException ex) {                        
         }
         String pedidos=new Gson().toJson(listaPedidos);
-        //return pedidos;
         
         return pedidos;
     }
@@ -168,8 +167,8 @@ public class dulceReal {
     /**
      * Web service operation
      */
-    @WebMethod(operationName = "conseguirVentar")
-    public String conseguirVentar(@WebParam(name = "idpedido") Integer idpedido) {
+    @WebMethod(operationName = "conseguirVentas")
+    public String conseguirVentas(@WebParam(name = "idpedido") int idpedido) {
         //TODO write your implementation code here:
         List<Venta> listaVentas = new ArrayList<Venta>();
         Connection con=DBConexion.getConnection();
@@ -217,5 +216,33 @@ public class dulceReal {
                 System.out.println("Existe el prducto con id " + rs2.getInt(3));
                 Producto prod=new Producto(rs2.getString(1), rs2.getFloat(2), rs2.getInt(3));
     }*/
+
+    /**
+     * Web service operation
+     */
+    @WebMethod(operationName = "mostrarPorCliente")
+    public String mostrarPorCliente(@WebParam(name = "idcliente") String idcliente) {
+        //TODO write your implementation code here:
+        List<Pedido> listaPedidos = new ArrayList<Pedido>();
+        Connection con=DBConexion.getConnection();
+        PreparedStatement ps;
+        ResultSet rs;
+        String sql="SELECT idpedido, costototal, cliente, fecha FROM pedido WHERE cliente = ?";
+        try {
+            ps=con.prepareStatement(sql);
+            ps.setString(1, idcliente);
+            rs = ps.executeQuery();
+            while(rs.next()){      
+                System.out.println("Existe algo");
+                Pedido p = new Pedido(rs.getInt(1), rs.getFloat(2), rs.getString(3), rs.getString(4));
+                listaPedidos.add(p);
+            }
+            rs.close();
+        } catch (SQLException ex) {                        
+        }
+        String pedidos=new Gson().toJson(listaPedidos);
+        
+        return pedidos;
+    }
     
 }

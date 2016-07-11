@@ -18,26 +18,71 @@ public class Pedido {
     public float costoTotal=0.0f;
     public String cliente;
     public List<Venta> ventas;
+    public String fecha;
 
 
-    public Pedido(String cliente, List<Venta> ventas) {
+    public Pedido(String cliente, List<Venta> ventas, String fecha) {
         this.cliente = cliente;
         this.ventas = ventas;
+        this.fecha = fecha;
         for (int i = 0; i < ventas.size(); i++) {
             costoTotal=costoTotal+ventas.get(i).costo;
         }
         
     }
     
-    public Pedido(int idpedido, float costototal, String cliente){
-        this.idpedido=idpedido;
-        this.costoTotal=costototal;
-        this.cliente=cliente;
-    }
-    
     public Pedido(){
             
         }
+    
+    public Pedido(int idpedido, float costototal, String cliente, String fecha){
+        this.idpedido=idpedido;
+        this.costoTotal=costototal;
+        this.cliente=cliente;
+        this.fecha=fecha;
+    }
+    
+    
+
+    public int getIdpedido() {
+        return idpedido;
+    }
+
+    public void setIdpedido(int idpedido) {
+        this.idpedido = idpedido;
+    }
+
+    public float getCostoTotal() {
+        return costoTotal;
+    }
+
+    public void setCostoTotal(float costoTotal) {
+        this.costoTotal = costoTotal;
+    }
+
+    public String getCliente() {
+        return cliente;
+    }
+
+    public void setCliente(String cliente) {
+        this.cliente = cliente;
+    }
+
+    public List<Venta> getVentas() {
+        return ventas;
+    }
+
+    public void setVentas(List<Venta> ventas) {
+        this.ventas = ventas;
+    }
+
+    public String getFecha() {
+        return fecha;
+    }
+
+    public void setFecha(String fecha) {
+        this.fecha = fecha;
+    }
     
     
     
